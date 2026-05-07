@@ -3,186 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عالم أمنية الخاص ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title id="siteTitle">عالم أمنية الخاص ✨</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
     <style>
-        :root { --rose: #ffc0cb; --gold: #ffd700; --glass: rgba(0, 0, 0, 0.85); }
-        body, html { margin: 0; padding: 0; width: 100%; min-height: 100vh; font-family: sans-serif; background: #000; color: white; overflow-x: hidden; }
-
-        /* الخلفية المزدوجة */
-        #site-bg { 
-            position: fixed; inset: 0; width: 100%; height: 100%; 
-            background-size: cover !important; background-position: center !important; 
-            background-attachment: fixed !important; z-index: -10; 
-        }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: -9; }
-
-        .glass { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
-        #login-screen { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 10000; background: #000; }
-        #main-content { display: none; padding: 60px 15px; text-align: center; }
-        .ar-font { font-family: 'Amiri Quran', serif; color: var(--rose); }
-
-        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 25px 0; }
-        .photo-card { border-radius: 15px; overflow: hidden; height: 160px; border: 1px solid var(--rose); }
-        .photo-card img { width: 100%; height: 100%; object-fit: cover; }
-
-        .music-btn { position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; background: var(--rose); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
-
-        /* زرار التحكم الجديد المخفي */
-        .admin-trigger { margin-top: 25px; font-size: 14px; color: rgba(255,255,255,0.3); cursor: pointer; display: block; text-decoration: none; }
-
-        #admin { position: fixed; inset: 0; background: #000; display: none; padding: 20px; z-index: 20000; overflow-y: auto; }
-        .m-item { background: #111; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-right: 5px solid var(--rose); text-align: right; }
-        .m-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 5px; display: block; }
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
+        :root { --gold: #ffb703; --glass: rgba(0, 0, 0, 0.3); } 
         
-        input, textarea { width: 100%; padding: 12px; background: #000; color: white; border: 1px solid #444; border-radius: 10px; margin-top: 10px; box-sizing: border-box; }
-        .btn-action { width: 100%; padding: 15px; background: var(--rose); border: none; font-weight: bold; border-radius: 10px; margin-top: 10px; cursor: pointer; color: #000; }
+        body { margin: 0; background-color: #000; background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Cairo', sans-serif; color: #fff; text-align: center; overflow-x: hidden; }
+        /* طبقة حماية للرؤية مع الحفاظ على الشفافية */
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(1px); z-index: -1; }
+
+        #gate { height: 100vh; display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; z-index: 9999; background-size: cover; background-position: center; transition: 1s; }
+        #gate-overlay { background: var(--glass); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 380px; }
+        
+        #content { display: none; opacity: 0; padding: 20px; transition: 1s; }
+        .grad-header { font-family: 'Amiri', serif; font-size: 2.8rem; text-shadow: 0 0 15px var(--gold); margin: 60px auto 20px; color: var(--gold); }
+
+        /* الكروت الشفافة تماماً */
+        .glass-card { background: var(--glass); backdrop-filter: blur(12px); max-width: 800px; margin: 15px auto; border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .live-counter { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; direction: ltr; }
+        .counter-unit { background: rgba(255, 183, 3, 0.1); padding: 10px; border-radius: 12px; min-width: 50px; border: 1px solid rgba(255, 183, 3, 0.3); }
+        .unit-num { display: block; font-size: 1.2rem; font-weight: bold; color: var(--gold); }
+        .unit-label { font-size: 0.6rem; color: #ddd; }
+
+        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
+        .gallery img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); }
+
+        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
+
+        .adm-btn { width: 100%; padding: 14px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); color: #fff; padding: 25px; border-radius: 20px; z-index: 10001; width: 90%; max-width: 400px; text-align: right; max-height: 85vh; overflow-y: auto; border: 1px solid var(--gold); }
+        input, textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; }
+        .trigger { opacity: 0.2; font-size: 12px; margin-top: 20px; cursor: pointer; display: block; }
     </style>
 </head>
 <body>
 
-    <div id="site-bg"></div>
-    <div class="overlay"></div>
-
-    <div class="music-btn" onclick="toggleM()" id="mIcon"><i class="fas fa-heart"></i></div>
-
-    <div id="login-screen">
-        <div class="glass" style="width:300px; text-align:center;">
-            <h2 class="ar-font">أمنية ✨</h2>
-            <input type="password" id="pIn" placeholder="الباسورد">
-            <button onclick="access()" class="btn-action">دخول</button>
-            
-            <span class="admin-trigger" onclick="openAdmin()">مبروك التخرج</span>
+    <div id="gate">
+        <div id="gate-overlay">
+            <h1 id="gateName" style="color:var(--gold); font-family:'Amiri';">أمنية ✨</h1>
+            <input type="password" id="gatePass" placeholder="كلمة السر" style="text-align: center;">
+            <button onclick="unlock()" class="adm-btn">دخول</button>
+            <span class="trigger" onclick="openAdmin()">مبروك التخرج</span>
         </div>
     </div>
 
-    <div id="main-content">
-        <audio id="bg-music" loop></audio>
-        <h1 id="h-title" class="ar-font" style="font-size: 2.5rem; color:var(--gold)"></h1>
-        <div class="glass"><p id="h-intro"></p></div>
-        <h3 class="ar-font" style="color:var(--rose)">أحلى اللحظات 📸</h3>
-        <div class="gallery" id="g-list"></div>
-        <h3 class="ar-font">رسائل لكِ ❤️</h3>
-        <div id="n-list"></div>
-    </div>
+    <div class="music-btn" onclick="toggleM()" id="mBtn"><i class="fas fa-music"></i></div>
 
-    <div id="admin">
-        <div style="max-width: 500px; margin: auto;">
-            <h2 style="text-align:center; color:var(--rose);">لوحة التحكم ⚙️</h2>
-            
-            <div class="glass">
-                <label>الباسورد الحالي:</label>
-                <input type="text" id="newPass" placeholder="تغيير الباسورد">
-                <button class="btn-action" style="background:var(--gold)" onclick="savePass()">حفظ الباسورد</button>
-            </div>
-
-            <div class="glass">
-                <label>الخلفية (رابط مباشر - أضمن):</label>
-                <input type="text" id="bgLink" placeholder="حط لينك الصورة هنا">
-                <button class="btn-action" onclick="saveBgLink()">تحديث باللينك</button>
-                <hr style="margin:20px 0; opacity:0.1">
-                <label>الخلفية (رفع من الجهاز):</label>
-                <input type="file" accept="image/*" onchange="up(this, 'bgUpload')">
-            </div>
-
-            <div class="glass">
-                <label>نصوص الموقع:</label>
-                <input type="text" id="inT" placeholder="العنوان">
-                <textarea id="inI" placeholder="التهنئة"></textarea>
-                <input type="file" accept="audio/*" onchange="up(this, 'song')">
-                <button class="btn-action" onclick="saveT()">حفظ النصوص</button>
-            </div>
-
-            <div class="glass">
-                <label>إضافة صور ورسائل:</label>
-                <input type="file" accept="image/*" onchange="up(this, 'gallery')">
-                <textarea id="mText" placeholder="اكتب الرسالة..."></textarea>
-                <button class="btn-action" onclick="addN()">إضافة</button>
-            </div>
-
-            <h4>إدارة المحتوى (الحذف):</h4>
-            <div id="admin-items"></div>
-            <button class="btn-action" style="background:#333; color:white;" onclick="closeAdmin()">إغلاق</button>
+    <div id="content">
+        <audio id="bgMusic" loop></audio>
+        <div class="grad-header" id="welcome-text">ألف مبروك النجاح</div>
+        
+        <div class="glass-card">
+            <h5 style="margin:0 0 10px; color:var(--gold);">بدايه الرحلة:</h5>
+            <div id="live-timer" class="live-counter"></div>
+            <div id="messages-list"></div>
         </div>
+
+        <h3 style="color:var(--gold)">ذكرياتنا 📸</h3>
+        <div class="gallery" id="photo-gallery"></div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, push, remove } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+    <div id="admin-panel">
+        <h3 style="text-align:center; color:var(--gold);">لوحة التحكم ⚙️</h3>
+        
+        <div class="glass-card" style="background:rgba(255,255,255,0.05)">
+            <label>1. إعدادات الدخول:</label>
+            <input type="text" id="confPass" placeholder="باسورد الدخول">
+            <input type="date" id="confDate">
+            <button onclick="saveSettings()" class="adm-btn">حفظ الأساسيات</button>
+        </div>
 
-        const fbc = {
+        <div class="glass-card" style="background:rgba(255,255,255,0.05)">
+            <label>2. التحكم في الخلفية (الأوبشن اللي ناقص):</label>
+            <input type="text" id="bgLink" placeholder="ضع رابط صورة مباشر (URL)">
+            <input type="file" id="bgFile" accept="image/*">
+            <button onclick="updateBg()" class="adm-btn" style="background:#28a745; color:white;">تحديث الخلفية فقط</button>
+        </div>
+
+        <div class="glass-card" style="background:rgba(255,255,255,0.05)">
+            <label>3. المحتوى والموسيقى:</label>
+            <input type="file" id="musicFile" accept="audio/*">
+            <input type="file" id="photoFile" accept="image/*">
+            <textarea id="msgInp" placeholder="اكتب رسالة جديدة"></textarea>
+            <button onclick="uploadContent()" id="upBtn" class="adm-btn">رفع المحتوى</button>
+        </div>
+
+        <button onclick="document.getElementById('admin-panel').style.display='none'" class="adm-btn" style="background:#444; color:#fff;">إغلاق</button>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        const firebaseConfig = {
             apiKey: "AIzaSyCxR76s_IdudpXrilKXLOsMyTtNrqPYTiI",
             authDomain: "omnia-97917.firebaseapp.com",
             projectId: "omnia-97917",
-            databaseURL: "https://omnia-97917-default-rtdb.firebaseio.com",
-            appId: "1:448875167140:web:c89fc5d74b88e31dbf9531"
+            databaseURL: "https://omnia-97917-default-rtdb.firebaseio.com"
         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        const app = initializeApp(fbc);
-        const db = getDatabase(app);
-        let currentPass = "123";
+        let settings = { date: "2026-01-01", pass: "123" };
 
-        onValue(ref(db, 'omnia_v24_final'), (s) => {
-            const data = s.val() || {};
-            currentPass = data.pass || "123";
-            document.getElementById('h-title').innerText = data.title || "مبروك التخرج";
-            document.getElementById('h-intro').innerText = data.intro || "أمنية";
-            
-            if(data.bg) document.getElementById('site-bg').style.backgroundImage = `url('${data.bg}')`;
-            if(data.song) document.getElementById('bg-music').src = data.song;
+        // مزامنة البيانات
+        db.ref('appSettings').on('value', s => { if(s.val()) { settings = s.val(); document.getElementById('confPass').value = settings.pass; document.getElementById('confDate').value = settings.date; } });
+        db.ref('visuals/bg').on('value', s => { if(s.val()) { document.body.style.backgroundImage = `url(${s.val()})`; document.getElementById('gate').style.backgroundImage = `url(${s.val()})`; } });
+        db.ref('visuals/music').on('value', s => { if(s.val()) document.getElementById('bgMusic').src = s.val(); });
 
-            const nBox = document.getElementById('n-list'), gBox = document.getElementById('g-list'), aItems = document.getElementById('admin-items');
-            nBox.innerHTML = gBox.innerHTML = aItems.innerHTML = "";
-
-            if(data.notes) Object.keys(data.notes).forEach(k => {
-                nBox.innerHTML += `<div class="glass">${data.notes[k]}</div>`;
-                aItems.innerHTML += `<div class="m-item"><b>الرسالة:</b> <p>${data.notes[k]}</p><button onclick="del('notes/${k}')" style="color:red; background:none; border:1px solid red; padding:5px; border-radius:5px;">حذف</button></div>`;
-            });
-
-            if(data.media) Object.keys(data.media).forEach(k => {
-                gBox.innerHTML += `<div class="photo-card"><img src="${data.media[k].data}"></div>`;
-                aItems.innerHTML += `<div class="m-item"><img src="${data.media[k].data}"><button onclick="del('media/${k}')" style="color:red; float:left;">حذف</button></div>`;
-            });
-        });
-
-        window.openAdmin = () => { document.getElementById('admin').style.display = 'block'; };
-        window.closeAdmin = () => { document.getElementById('admin').style.display = 'none'; };
-
-        window.saveBgLink = () => {
-            const link = document.getElementById('bgLink').value;
-            if(link) { set(ref(db, 'omnia_v24_final/bg'), link); alert("تم تثبيت رابط الخلفية! ✅"); }
-        };
-
-        window.up = (i, t) => {
-            const r = new FileReader();
-            r.onload = (e) => {
-                if(t === 'bgUpload') set(ref(db, 'omnia_v24_final/bg'), e.target.result);
-                else if(t === 'song') set(ref(db, 'omnia_v24_final/song'), e.target.result);
-                else push(ref(db, 'omnia_v24_final/media'), { data: e.target.result });
-                alert("تم الحفظ! ✅");
-            };
-            r.readAsDataURL(i.files[0]);
-        };
-
-        window.savePass = () => { set(ref(db, 'omnia_v24_final/pass'), document.getElementById('newPass').value); alert("تم تغيير الباسورد! 🔐"); };
-        window.del = (p) => { if(confirm("حذف نهائي؟")) remove(ref(db, `omnia_v24_final/${p}`)); };
-        window.addN = () => { push(ref(db, 'omnia_v24_final/notes'), document.getElementById('mText').value); document.getElementById('mText').value=""; };
-        window.saveT = () => { set(ref(db, 'omnia_v24_final/title'), document.getElementById('inT').value); set(ref(db, 'omnia_v24_final/intro'), document.getElementById('inI').value); };
-        
-        window.toggleM = () => {
-            const a = document.getElementById('bg-music');
-            if(a.paused) { a.play(); document.getElementById('mIcon').innerHTML = '<i class="fas fa-heart"></i>'; }
-            else { a.pause(); document.getElementById('mIcon').innerHTML = '<i class="fas fa-heart-broken"></i>'; }
-        };
-
-        window.access = () => {
-            if(document.getElementById('pIn').value === currentPass) {
-                document.getElementById('login-screen').style.display = "none";
-                document.getElementById('main-content').style.display = "block";
-                document.getElementById('bg-music').play();
+        function unlock() {
+            if(document.getElementById('gatePass').value === settings.pass) {
+                document.getElementById('gate').style.display = "none";
+                document.getElementById('content').style.display = "block";
+                document.getElementById('content').style.opacity = "1";
+                document.getElementById('bgMusic').play();
+                startLiveCounter(); loadData();
             } else alert("الباسورد غلط!");
-        };
+        }
+
+        function openAdmin() { if(prompt("باسورد الإدارة:") === "1997") document.getElementById('admin-panel').style.display = "block"; }
+
+        function toggleM() {
+            const m = document.getElementById('bgMusic');
+            if(m.paused) { m.play(); document.getElementById('mBtn').innerHTML = '<i class="fas fa-pause"></i>'; }
+            else { m.pause(); document.getElementById('mBtn').innerHTML = '<i class="fas fa-music"></i>'; }
+        }
+
+        async function saveSettings() {
+            await db.ref('appSettings').set({ pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
+            alert("تم حفظ الأساسيات ✅");
+        }
+
+        async function updateBg() {
+            const link = document.getElementById('bgLink').value;
+            const file = document.getElementById('bgFile').files[0];
+            if(link) await db.ref('visuals/bg').set(link);
+            if(file) {
+                const r = new FileReader(); r.readAsDataURL(file);
+                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("الخلفية اتحدثت ✅"); };
+            } else if(link) alert("الخلفية اتحدثت ✅");
+        }
+
+        async function uploadContent() {
+            const btn = document.getElementById('upBtn'); btn.disabled = true;
+            const music = document.getElementById('musicFile').files[0];
+            const photo = document.getElementById('photoFile').files[0];
+            const msg = document.getElementById('msgInp').value;
+
+            if(msg) await db.ref('messages').push({text: msg});
+            if(music) {
+                const r = new FileReader(); r.readAsDataURL(music);
+                r.onload = async () => { await db.ref('visuals/music').set(r.result); };
+            }
+            if(photo) {
+                const r = new FileReader(); r.readAsDataURL(photo);
+                r.onload = async () => { await db.ref('photos').push({url: r.result}); finish(); };
+            } else finish();
+        }
+
+        function finish() { alert("تم الرفع ✅"); location.reload(); }
+
+        function loadData() {
+            db.ref('messages').on('value', s => {
+                const l = document.getElementById('messages-list'); l.innerHTML = "";
+                if(s.val()) Object.values(s.val()).reverse().forEach(m => {
+                    l.innerHTML += `<div style="background:rgba(255,215,0,0.05); padding:10px; border-radius:10px; margin:5px 0; border-right:3px solid var(--gold); text-align:right;">${m.text}</div>`;
+                });
+            });
+            db.ref('photos').on('value', s => {
+                const g = document.getElementById('photo-gallery'); g.innerHTML = "";
+                if(s.val()) Object.values(s.val()).forEach(p => { g.innerHTML += `<img src="${p.url}">`; });
+            });
+        }
+
+        function startLiveCounter() {
+            setInterval(() => {
+                const startDate = new Date(settings.date + " 00:00:00");
+                const now = new Date();
+                let diff = now - startDate;
+                let years = now.getFullYear() - startDate.getFullYear();
+                let months = now.getMonth() - startDate.getMonth();
+                let days = now.getDate() - startDate.getDate();
+                if (days < 0) { months--; let lastMonth = new Date(now.getFullYear(), now.getMonth(), 0); days += lastMonth.getDate(); }
+                if (months < 0) { years--; months += 12; }
+                const hrs = Math.floor((diff / (1000 * 60 * 60)) % 24), mins = Math.floor((diff / (1000 * 60)) % 60), secs = Math.floor((diff / 1000) % 60);
+                document.getElementById('live-timer').innerHTML = `
+                    <div class="counter-unit"><span class="unit-num">${years}</span><span class="unit-label">سنة</span></div>
+                    <div class="counter-unit"><span class="unit-num">${months}</span><span class="unit-label">شهر</span></div>
+                    <div class="counter-unit"><span class="unit-num">${days}</span><span class="unit-label">يوم</span></div>
+                    <div class="counter-unit"><span class="unit-num">${hrs}</span><span class="unit-label">ساعة</span></div>
+                    <div class="counter-unit"><span class="unit-num">${mins}</span><span class="unit-label">دقيقة</span></div>
+                    <div class="counter-unit"><span class="unit-num">${secs}</span><span class="unit-label">ثانية</span></div>`;
+            }, 1000);
+        }
     </script>
 </body>
 </html>
