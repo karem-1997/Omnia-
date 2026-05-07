@@ -15,7 +15,6 @@
         body { margin: 0; background-color: #000; background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Cairo', sans-serif; color: #fff; text-align: center; overflow-x: hidden; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(1px); z-index: -1; }
 
-        /* شاشة الدخول */
         #gate { height: 100vh; display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; z-index: 9999; background-size: cover; background-position: center; transition: 1s; }
         #gate-overlay { background: var(--glass); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 380px; }
         
@@ -32,15 +31,12 @@
 
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
         .gallery img, .gallery video { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
-        .gallery img:hover { transform: scale(1.03); border-color: var(--gold); }
 
-        /* Lightbox (فتح الصور كبيرة) */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; }
         #lightbox img { max-width: 90%; max-height: 80%; border-radius: 10px; border: 2px solid var(--gold); }
-        .close-lightbox { position: absolute; top: 30px; right: 30px; font-size: 50px; color: var(--gold); cursor: pointer; transition: 0.3s; }
-        .close-lightbox:hover { transform: rotate(90deg); }
+        .close-lightbox { position: absolute; top: 30px; right: 30px; font-size: 50px; color: var(--gold); cursor: pointer; }
 
-        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; box-shadow: 0 0 10px var(--gold); }
+        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
 
         .adm-btn { width: 100%; padding: 14px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
@@ -64,18 +60,13 @@
         </div>
     </div>
 
-    <div id="lightbox">
-        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-        <img id="light-img" src="">
-    </div>
-
+    <div id="lightbox"><span class="close-lightbox" onclick="closeLightbox()">&times;</span><img id="light-img" src=""></div>
     <div class="music-btn" onclick="toggleM()" id="mBtn"><i class="fas fa-music"></i></div>
 
     <div id="content">
         <audio id="bgMusic" loop></audio>
-        
-        <div class="grad-header" id="welcome-title">ألف مبروك يا أمنية</div>
-        <p class="grad-intro" id="welcome-intro">مبروك التخرج والنجاح، فخورين بيكي جداً</p>
+        <div class="grad-header" id="welcome-title">ألف مبروك</div>
+        <p class="grad-intro" id="welcome-intro">مبروك النجاح</p>
         
         <div class="glass-card">
             <h5 style="margin:0 0 10px; color:var(--gold);">بدايه الرحلة:</h5>
@@ -88,35 +79,33 @@
     </div>
 
     <div id="admin-panel">
-        <h3 style="text-align:center; color:var(--gold);">إدارة عالم أمنية ⚙️</h3>
+        <h3 style="text-align:center; color:var(--gold);">إدارة المحتوى اللحظية ⚙️</h3>
         
         <div class="glass-card" style="background:rgba(255,255,255,0.03)">
-            <label>الإعدادات الأساسية:</label>
-            <input type="text" id="confTitle" placeholder="العنوان (مبروك يا أمنية)">
-            <input type="text" id="confIntro" placeholder="التهنئة (فخورين بيكي...)">
-            <input type="text" id="confPass" placeholder="كلمة سر الدخول">
-            <input type="date" id="confDate" title="تاريخ بداية العداد">
-            <label>رابط خلفية مباشر (URL):</label>
-            <input type="text" id="bgLink" placeholder="أو ارفع ملف">
+            <label>الإعدادات والخلفية:</label>
+            <input type="text" id="confTitle" placeholder="العنوان">
+            <input type="text" id="confIntro" placeholder="رسالة التهنئة">
+            <input type="text" id="confPass" placeholder="باسورد الدخول">
+            <input type="date" id="confDate">
             <input type="file" id="bgFile" accept="image/*">
-            <button onclick="saveSettings()" class="adm-btn">حفظ وتحديث الخلفية</button>
+            <button onclick="saveSettings()" class="adm-btn">حفظ الأساسيات</button>
         </div>
 
         <div class="glass-card" style="background:rgba(255,255,255,0.03)">
-            <label>رفع محتوى جديد:</label>
-            <input type="file" id="photoFile" accept="image/*" title="صورة للذكريات">
-            <input type="file" id="videoFile" accept="video/*" title="فيديو تخرج">
-            <input type="file" id="musicFile" accept="audio/*" title="أغنية الصفحة">
-            <textarea id="msgInp" placeholder="رسالة تهنئة أو كلمة لكِ"></textarea>
-            <button onclick="uploadContent()" id="upBtn" class="adm-btn" style="background:#28a745; color:white;">رفع المحتوى الجديد</button>
+            <label>إضافة محتوى جديد:</label>
+            <input type="file" id="photoFile" accept="image/*">
+            <input type="file" id="videoFile" accept="video/*">
+            <input type="file" id="musicFile" accept="audio/*">
+            <textarea id="msgInp" placeholder="اكتب رسالة.."></textarea>
+            <button onclick="uploadContent()" id="upBtn" class="adm-btn" style="background:#28a745; color:white;">رفع الآن</button>
         </div>
 
-        <div id="manage-section" class="glass-card" style="background:rgba(255,255,255,0.03); max-height: 200px; overflow-y: auto;">
-            <h5 style="color:var(--gold); text-align:center; margin-top:0;">إدارة المحتوى (الحذف)</h5>
+        <div id="manage-section" class="glass-card" style="background:rgba(255,255,255,0.03); max-height: 250px; overflow-y: auto;">
+            <h5 style="color:var(--gold); text-align:center; margin:0 0 10px 0;">العناصر الحالية (حذف)</h5>
             <div id="manage-list"></div>
         </div>
 
-        <button onclick="document.getElementById('admin-panel').style.display='none'" class="adm-btn" style="background:#444; color:#fff;">إغلاق</button>
+        <button onclick="document.getElementById('admin-panel').style.display='none'" class="adm-btn" style="background:#444; color:#fff;">إغلاق اللوحة</button>
     </div>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -132,7 +121,18 @@
 
         let settings = { title: "أمنية", intro: "فخورين بيكي", date: "2026-01-01", pass: "123" };
 
-        db.ref('appSettings').on('value', s => { if(s.val()) { settings = s.val(); document.getElementById('welcome-title').innerText = settings.title || "ألف مبروك"; document.getElementById('welcome-intro').innerText = settings.intro || "فخورين بيكي"; document.getElementById('confTitle').value = settings.title; document.getElementById('confIntro').value = settings.intro; document.getElementById('confPass').value = settings.pass; document.getElementById('confDate').value = settings.date; } });
+        db.ref('appSettings').on('value', s => { 
+            if(s.val()) { 
+                settings = s.val(); 
+                document.getElementById('welcome-title').innerText = settings.title || "ألف مبروك"; 
+                document.getElementById('welcome-intro').innerText = settings.intro || "فخورين بيكي"; 
+                document.getElementById('confTitle').value = settings.title || "";
+                document.getElementById('confIntro').value = settings.intro || "";
+                document.getElementById('confPass').value = settings.pass || "";
+                document.getElementById('confDate').value = settings.date || "";
+            } 
+        });
+
         db.ref('visuals/bg').on('value', s => { if(s.val()) { document.body.style.backgroundImage = `url(${s.val()})`; document.getElementById('gate').style.backgroundImage = `url(${s.val()})`; } });
         db.ref('visuals/music').on('value', s => { if(s.val()) document.getElementById('bgMusic').src = s.val(); });
 
@@ -143,15 +143,12 @@
                 document.getElementById('content').style.opacity = "1";
                 document.getElementById('bgMusic').play();
                 startLiveCounter(); loadData();
-            } else alert("غلط!");
+            } else alert("خطأ في كلمة السر");
         }
 
-        // فتح وإغلاق الصور الكبيرة
+        function openAdmin() { if(prompt("باسورد الإدارة:") === "1997") { document.getElementById('admin-panel').style.display = "block"; loadManagement(); } }
         function openImg(url) { document.getElementById('light-img').src = url; document.getElementById('lightbox').style.display = "flex"; }
         function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
-
-        function openAdmin() { if(prompt("كلمة سر الإدارة:") === "1997") { document.getElementById('admin-panel').style.display = "block"; loadManagement(); } }
-
         function toggleM() {
             const m = document.getElementById('bgMusic');
             if(m.paused) { m.play(); document.getElementById('mBtn').innerHTML = '<i class="fas fa-pause"></i>'; }
@@ -159,39 +156,38 @@
         }
 
         async function saveSettings() {
-            const bgLink = document.getElementById('bgLink').value;
             const bgFile = document.getElementById('bgFile').files[0];
-            await db.ref('appSettings').set({ title: document.getElementById('confTitle').value, intro: document.getElementById('confIntro').value, pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
-            if(bgLink) await db.ref('visuals/bg').set(bgLink);
+            await db.ref('appSettings').update({ title: document.getElementById('confTitle').value, intro: document.getElementById('confIntro').value, pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
             if(bgFile) {
                 const r = new FileReader(); r.readAsDataURL(bgFile);
-                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ ✅"); };
-            } else { alert("تم الحفظ ✅"); }
+                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ وتحديث الخلفية ✅"); };
+            } else alert("تم حفظ الإعدادات ✅");
         }
 
         async function uploadContent() {
-            const btn = document.getElementById('upBtn'); btn.disabled = true;
+            const btn = document.getElementById('upBtn'); btn.disabled = true; btn.innerText = "جاري الرفع...";
             const music = document.getElementById('musicFile').files[0];
             const photo = document.getElementById('photoFile').files[0];
             const video = document.getElementById('videoFile').files[0];
             const msg = document.getElementById('msgInp').value;
 
-            if(msg) await db.ref('messages').push({text: msg});
-            if(music) {
-                const r = new FileReader(); r.readAsDataURL(music);
-                r.onload = async () => { await db.ref('visuals/music').set(r.result); };
-            }
-            if(photo) {
-                const r = new FileReader(); r.readAsDataURL(photo);
-                r.onload = async () => { await db.ref('photos').push({url: r.result, type: 'img'}); };
-            }
-            if(video) {
-                const r = new FileReader(); r.readAsDataURL(video);
-                r.onload = async () => { await db.ref('photos').push({url: r.result, type: 'vid'}); finish(); };
-            } else finish();
-        }
+            if(msg) { await db.ref('messages').push({text: msg}); document.getElementById('msgInp').value = ""; }
+            
+            const readFile = (file) => new Promise((resolve) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(file); });
 
-        function finish() { alert("تم الرفع ✅"); location.reload(); }
+            if(music) { const res = await readFile(music); await db.ref('visuals/music').set(res); }
+            if(photo) { const res = await readFile(photo); await db.ref('photos').push({url: res, type: 'img'}); }
+            if(video) { const res = await readFile(video); await db.ref('photos').push({url: res, type: 'vid'}); }
+
+            // تصفية الخانات بعد الرفع
+            document.getElementById('photoFile').value = "";
+            document.getElementById('videoFile').value = "";
+            document.getElementById('musicFile').value = "";
+            
+            btn.disabled = false; btn.innerText = "رفع الآن";
+            alert("تم الرفع بنجاح ✅");
+            loadManagement(); // تحديث قائمة الحذف فوراً
+        }
 
         function loadData() {
             db.ref('messages').on('value', s => {
@@ -216,7 +212,7 @@
                     if(s.val()) Object.entries(s.val()).forEach(([key, val]) => {
                         const item = document.createElement('div');
                         item.className = 'manage-item';
-                        let preview = type === 'photos' ? (val.type === 'vid' ? '📽️ فيديو' : `<img src="${val.url}">`) : `📝 ${val.text.substring(0,15)}...`;
+                        let preview = type === 'photos' ? (val.type === 'vid' ? '📽️ فيديو' : `<img src="${val.url}">`) : `📝 ${val.text.substring(0,12)}..`;
                         item.innerHTML = `<span>${preview}</span> <button class="del-btn" onclick="deleteItem('${type}','${key}')">حذف</button>`;
                         container.appendChild(item);
                     });
@@ -224,7 +220,7 @@
             });
         }
 
-        async function deleteItem(t, k) { if(confirm("حذف نهائي؟")) { await db.ref(`${t}/${k}`).remove(); loadManagement(); } }
+        async function deleteItem(t, k) { if(confirm("حذف؟")) { await db.ref(`${t}/${k}`).remove(); loadManagement(); } }
 
         function startLiveCounter() {
             setInterval(() => {
