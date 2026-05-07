@@ -15,11 +15,13 @@
         body { margin: 0; background-color: #000; background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Cairo', sans-serif; color: #fff; text-align: center; overflow-x: hidden; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(1px); z-index: -1; }
 
+        /* شاشة الدخول */
         #gate { height: 100vh; display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; z-index: 9999; background-size: cover; background-position: center; transition: 1s; }
         #gate-overlay { background: var(--glass); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 380px; }
         
         #content { display: none; opacity: 0; padding: 20px; transition: 1s; }
-        .grad-header { font-family: 'Amiri', serif; font-size: 2.8rem; text-shadow: 0 0 15px var(--gold); margin: 60px auto 20px; color: var(--gold); }
+        .grad-header { font-family: 'Amiri', serif; font-size: 2.8rem; text-shadow: 0 0 15px var(--gold); margin: 60px auto 10px; color: var(--gold); }
+        .grad-intro { font-size: 1.2rem; color: #ddd; margin-bottom: 25px; }
 
         .glass-card { background: var(--glass); backdrop-filter: blur(12px); max-width: 800px; margin: 15px auto; border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         
@@ -29,7 +31,14 @@
         .unit-label { font-size: 0.6rem; color: #ddd; }
 
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
-        .gallery img, .gallery video { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); }
+        .gallery img, .gallery video { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
+        .gallery img:hover { transform: scale(1.03); border-color: var(--gold); }
+
+        /* Lightbox (فتح الصور كبيرة) */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; }
+        #lightbox img { max-width: 90%; max-height: 80%; border-radius: 10px; border: 2px solid var(--gold); }
+        .close-lightbox { position: absolute; top: 30px; right: 30px; font-size: 50px; color: var(--gold); cursor: pointer; transition: 0.3s; }
+        .close-lightbox:hover { transform: rotate(90deg); }
 
         .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; box-shadow: 0 0 10px var(--gold); }
 
@@ -55,16 +64,23 @@
         </div>
     </div>
 
+    <div id="lightbox">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <img id="light-img" src="">
+    </div>
+
     <div class="music-btn" onclick="toggleM()" id="mBtn"><i class="fas fa-music"></i></div>
 
     <div id="content">
         <audio id="bgMusic" loop></audio>
-        <div class="grad-header" id="welcome-text">ألف مبروك</div>
+        
+        <div class="grad-header" id="welcome-title">ألف مبروك يا أمنية</div>
+        <p class="grad-intro" id="welcome-intro">مبروك التخرج والنجاح، فخورين بيكي جداً</p>
         
         <div class="glass-card">
             <h5 style="margin:0 0 10px; color:var(--gold);">بدايه الرحلة:</h5>
             <div id="live-timer" class="live-counter"></div>
-            <div id="messages-list"></div>
+            <div id="messages-list" style="margin-top:20px;"></div>
         </div>
 
         <h3 style="color:var(--gold)">ذكرياتنا 📸</h3>
@@ -75,25 +91,27 @@
         <h3 style="text-align:center; color:var(--gold);">إدارة عالم أمنية ⚙️</h3>
         
         <div class="glass-card" style="background:rgba(255,255,255,0.03)">
-            <label>باسورد الدخول / التاريخ:</label>
-            <input type="text" id="confPass" placeholder="كلمة السر">
-            <input type="date" id="confDate">
+            <label>الإعدادات الأساسية:</label>
+            <input type="text" id="confTitle" placeholder="العنوان (مبروك يا أمنية)">
+            <input type="text" id="confIntro" placeholder="التهنئة (فخورين بيكي...)">
+            <input type="text" id="confPass" placeholder="كلمة سر الدخول">
+            <input type="date" id="confDate" title="تاريخ بداية العداد">
             <label>رابط خلفية مباشر (URL):</label>
-            <input type="text" id="bgLink" placeholder="أو ارفع ملف من الأسفل">
+            <input type="text" id="bgLink" placeholder="أو ارفع ملف">
             <input type="file" id="bgFile" accept="image/*">
-            <button onclick="saveSettings()" class="adm-btn">حفظ الإعدادات والخلفية</button>
+            <button onclick="saveSettings()" class="adm-btn">حفظ وتحديث الخلفية</button>
         </div>
 
         <div class="glass-card" style="background:rgba(255,255,255,0.03)">
-            <label>رفع (صورة / فيديو / موسيقى):</label>
+            <label>رفع محتوى جديد:</label>
             <input type="file" id="photoFile" accept="image/*" title="صورة للذكريات">
             <input type="file" id="videoFile" accept="video/*" title="فيديو تخرج">
             <input type="file" id="musicFile" accept="audio/*" title="أغنية الصفحة">
-            <textarea id="msgInp" placeholder="رسالة حب أو تخرج"></textarea>
+            <textarea id="msgInp" placeholder="رسالة تهنئة أو كلمة لكِ"></textarea>
             <button onclick="uploadContent()" id="upBtn" class="adm-btn" style="background:#28a745; color:white;">رفع المحتوى الجديد</button>
         </div>
 
-        <div id="manage-section" class="glass-card" style="background:rgba(255,255,255,0.03); max-height: 250px; overflow-y: auto;">
+        <div id="manage-section" class="glass-card" style="background:rgba(255,255,255,0.03); max-height: 200px; overflow-y: auto;">
             <h5 style="color:var(--gold); text-align:center; margin-top:0;">إدارة المحتوى (الحذف)</h5>
             <div id="manage-list"></div>
         </div>
@@ -112,9 +130,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let settings = { date: "2026-01-01", pass: "123" };
+        let settings = { title: "أمنية", intro: "فخورين بيكي", date: "2026-01-01", pass: "123" };
 
-        db.ref('appSettings').on('value', s => { if(s.val()) { settings = s.val(); document.getElementById('confPass').value = settings.pass; document.getElementById('confDate').value = settings.date; } });
+        db.ref('appSettings').on('value', s => { if(s.val()) { settings = s.val(); document.getElementById('welcome-title').innerText = settings.title || "ألف مبروك"; document.getElementById('welcome-intro').innerText = settings.intro || "فخورين بيكي"; document.getElementById('confTitle').value = settings.title; document.getElementById('confIntro').value = settings.intro; document.getElementById('confPass').value = settings.pass; document.getElementById('confDate').value = settings.date; } });
         db.ref('visuals/bg').on('value', s => { if(s.val()) { document.body.style.backgroundImage = `url(${s.val()})`; document.getElementById('gate').style.backgroundImage = `url(${s.val()})`; } });
         db.ref('visuals/music').on('value', s => { if(s.val()) document.getElementById('bgMusic').src = s.val(); });
 
@@ -125,8 +143,12 @@
                 document.getElementById('content').style.opacity = "1";
                 document.getElementById('bgMusic').play();
                 startLiveCounter(); loadData();
-            } else alert("الباسورد غلط!");
+            } else alert("غلط!");
         }
+
+        // فتح وإغلاق الصور الكبيرة
+        function openImg(url) { document.getElementById('light-img').src = url; document.getElementById('lightbox').style.display = "flex"; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = "none"; }
 
         function openAdmin() { if(prompt("كلمة سر الإدارة:") === "1997") { document.getElementById('admin-panel').style.display = "block"; loadManagement(); } }
 
@@ -139,12 +161,12 @@
         async function saveSettings() {
             const bgLink = document.getElementById('bgLink').value;
             const bgFile = document.getElementById('bgFile').files[0];
-            await db.ref('appSettings').set({ pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
+            await db.ref('appSettings').set({ title: document.getElementById('confTitle').value, intro: document.getElementById('confIntro').value, pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
             if(bgLink) await db.ref('visuals/bg').set(bgLink);
             if(bgFile) {
                 const r = new FileReader(); r.readAsDataURL(bgFile);
-                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ وتحديث الخلفية ✅"); };
-            } else { alert("تم حفظ الإعدادات ✅"); }
+                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ ✅"); };
+            } else { alert("تم الحفظ ✅"); }
         }
 
         async function uploadContent() {
@@ -169,20 +191,20 @@
             } else finish();
         }
 
-        function finish() { alert("تم الرفع بنجاح ✅"); location.reload(); }
+        function finish() { alert("تم الرفع ✅"); location.reload(); }
 
         function loadData() {
             db.ref('messages').on('value', s => {
                 const l = document.getElementById('messages-list'); l.innerHTML = "";
                 if(s.val()) Object.values(s.val()).reverse().forEach(m => {
-                    l.innerHTML += `<div style="background:rgba(255,215,0,0.05); padding:10px; border-radius:10px; margin:5px 0; border-right:3px solid var(--gold); text-align:right;">${m.text}</div>`;
+                    l.innerHTML += `<div style="background:rgba(255,215,0,0.05); padding:10px; border-radius:12px; margin:8px 0; border-right:3px solid var(--gold); text-align:right;">${m.text}</div>`;
                 });
             });
             db.ref('photos').on('value', s => {
                 const g = document.getElementById('photo-gallery'); g.innerHTML = "";
                 if(s.val()) Object.values(s.val()).forEach(p => {
                     if(p.type === 'vid') g.innerHTML += `<video src="${p.url}" controls></video>`;
-                    else g.innerHTML += `<img src="${p.url}">`;
+                    else g.innerHTML += `<img src="${p.url}" onclick="openImg('${p.url}')">`;
                 });
             });
         }
