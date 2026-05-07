@@ -4,43 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عالم أمنية الخاص ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Playball&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --rose: #ffc0cb; --gold: #ffd700; --glass: rgba(0, 0, 0, 0.8); }
-        body, html { margin: 0; padding: 0; width: 100%; min-height: 100vh; font-family: 'Segoe UI', sans-serif; background: #000; color: white; overflow-x: hidden; }
+        :root { --rose: #ffc0cb; --gold: #ffd700; --glass: rgba(0, 0, 0, 0.85); }
+        body, html { margin: 0; padding: 0; width: 100%; min-height: 100vh; font-family: sans-serif; background: #000; color: white; overflow-x: hidden; }
 
-        /* حل مشكلة الخلفية النهائي */
+        /* الخلفية الحديدية */
         #site-bg { 
             position: fixed; inset: 0; width: 100%; height: 100%; 
             background-size: cover !important; background-position: center !important; 
-            z-index: -5; transition: 0.5s;
+            background-attachment: fixed !important; z-index: -10; 
         }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: -4; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(5px); z-index: -9; }
 
-        .glass-panel { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .glass { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
 
         #login-screen { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; z-index: 10000; background: #000; }
-        #main-content { display: none; padding: 50px 15px; text-align: center; }
+        #main-content { display: none; padding: 60px 15px; text-align: center; }
         .ar-font { font-family: 'Amiri Quran', serif; color: var(--rose); }
 
-        /* المعرض والتحكم */
         .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
-        .photo-card { border-radius: 12px; overflow: hidden; height: 150px; border: 1px solid var(--rose); }
+        .photo-card { border-radius: 15px; overflow: hidden; height: 160px; border: 1px solid var(--rose); }
         .photo-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        #viewer { position: fixed; inset: 0; background: rgba(0,0,0,0.98); display: none; justify-content: center; align-items: center; z-index: 11000; }
-        #viewer img { max-width: 95%; max-height: 80%; border-radius: 10px; }
-
-        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--rose); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
+        .music-btn { position: fixed; top: 20px; left: 20px; width: 50px; height: 50px; background: var(--rose); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; box-shadow: 0 0 15px var(--rose); }
         .gear { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 9000; cursor: pointer; }
 
-        #admin { position: fixed; inset: 0; background: #111; display: none; padding: 20px; z-index: 9500; overflow-y: auto; }
-        .m-item { background: #222; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--rose); }
-        .m-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; margin-left: 10px; }
+        #admin { position: fixed; inset: 0; background: #000; display: none; padding: 20px; z-index: 9500; overflow-y: auto; }
+        .m-item { background: #1a1a1a; padding: 15px; border-radius: 12px; margin-bottom: 10px; border-right: 5px solid var(--rose); text-align: right; }
+        .m-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; display: block; }
         
-        input, textarea { width: 100%; padding: 12px; background: #000; color: white; border: 1px solid #444; border-radius: 8px; margin-top: 10px; box-sizing: border-box; }
-        .btn-action { width: 100%; padding: 12px; background: var(--rose); border: none; font-weight: bold; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+        input, textarea { width: 100%; padding: 12px; background: #111; color: white; border: 1px solid #444; border-radius: 10px; margin-top: 10px; box-sizing: border-box; }
+        .btn-action { width: 100%; padding: 14px; background: var(--rose); border: none; font-weight: bold; border-radius: 10px; margin-top: 10px; cursor: pointer; color: #000; }
     </style>
 </head>
 <body>
@@ -48,66 +44,64 @@
     <div id="site-bg"></div>
     <div class="overlay"></div>
 
-    <div class="music-btn" onclick="controlMusic()" id="mIcon"><i class="fas fa-heart"></i></div>
+    <div class="music-btn" onclick="toggleM()" id="mIcon"><i class="fas fa-heart"></i></div>
 
     <div id="login-screen">
-        <div class="glass-panel" style="width:280px; text-align:center;">
+        <div class="glass" style="width:300px; text-align:center;">
             <h2 class="ar-font">عالم أمنية</h2>
-            <input type="password" id="pIn" placeholder="الباسورد">
-            <button onclick="access()" class="btn-action">دخول</button>
+            <input type="password" id="pIn" placeholder="اكتب الباسورد">
+            <button onclick="access()" class="btn-action">فتح الهدية ✨</button>
         </div>
     </div>
 
-    <div id="viewer" onclick="this.style.display='none'"><img id="v-img"></div>
-
     <div id="main-content">
         <audio id="bg-music" loop></audio>
-        <h1 id="h-title" class="ar-font" style="font-size: 2.2rem;"></h1>
-        <div class="glass-panel"><p id="h-intro"></p></div>
-
-        <h3 class="ar-font" style="color:var(--gold)">ذكرياتنا السعيدة 📸</h3>
+        <h1 id="h-title" class="ar-font" style="font-size: 2.5rem; color:var(--gold)"></h1>
+        <div class="glass"><p id="h-intro"></p></div>
+        <h3 class="ar-font" style="color:var(--rose)">أجمل اللحظات 📸</h3>
         <div class="gallery" id="g-list"></div>
-
-        <h3 class="ar-font">رسائل خاصة لكِ ❤️</h3>
+        <h3 class="ar-font">رسايل عشانك ❤️</h3>
         <div id="n-list"></div>
     </div>
 
-    <div class="gear" onclick="toggleAdmin()"><i class="fas fa-user-shield"></i></div>
+    <div class="gear" onclick="toggleAdmin()"><i class="fas fa-cog"></i></div>
 
     <div id="admin">
         <div style="max-width: 500px; margin: auto;">
-            <h3 style="text-align:center;">لوحة التحكم الشاملة ⚙️</h3>
+            <h2 style="text-align:center; color:var(--rose);">إعدادات الموقع ⚙️</h2>
             
-            <div class="glass-panel">
+            <div class="glass">
                 <label>تغيير الباسورد الجديد:</label>
-                <input type="text" id="newPass" placeholder="اكتب الباسورد الجديد هنا">
-                <button class="btn-action" style="background:var(--gold)" onclick="savePass()">تحديث الباسورد</button>
+                <input type="text" id="newPass" placeholder="اكتب الباسورد هنا">
+                <button class="btn-action" style="background:var(--gold)" onclick="savePass()">حفظ الباسورد</button>
             </div>
 
-            <div class="glass-panel">
-                <label>تغيير الخلفية (حل نهائي):</label>
-                <input type="file" accept="image/*" onchange="up(this, 'bg')">
-                <label style="margin-top:10px; display:block;">تغيير الأغنية (MP3):</label>
+            <div class="glass">
+                <label>رابط الخلفية (انسخ لينك الصورة وضعه هنا):</label>
+                <input type="text" id="bgLink" placeholder="ضع رابط الصورة هنا...">
+                <button class="btn-action" onclick="saveBg()">تحديث الخلفية</button>
+                <hr style="margin:15px 0; opacity:0.1;">
+                <label>رفع أغنية جديدة (MP3):</label>
                 <input type="file" accept="audio/*" onchange="up(this, 'song')">
             </div>
 
-            <div class="glass-panel">
-                <label>العناوين:</label>
-                <input type="text" id="inT" placeholder="العنوان الرئيسي">
-                <textarea id="inI" placeholder="رسالة التهنئة"></textarea>
+            <div class="glass">
+                <label>النصوص:</label>
+                <input type="text" id="inT" placeholder="العنوان">
+                <textarea id="inI" placeholder="التهنئة"></textarea>
                 <button class="btn-action" onclick="saveT()">حفظ النصوص</button>
             </div>
 
-            <div class="glass-panel">
-                <label>إضافة محتوى جديد:</label>
+            <div class="glass">
+                <label>إضافة صور ورسايل:</label>
                 <input type="file" accept="image/*" onchange="up(this, 'gallery')">
-                <textarea id="mText" placeholder="اكتب رسالة جديدة..."></textarea>
+                <textarea id="mText" placeholder="اكتب رسالة..."></textarea>
                 <button class="btn-action" onclick="addN()">إضافة الرسالة</button>
             </div>
 
-            <h4>إدارة المحتوى الحالي (الحذف):</h4>
+            <h4>المحتوى (الحذف):</h4>
             <div id="admin-items"></div>
-            <button class="btn-action" style="background:#444; color:white;" onclick="toggleAdmin()">إغلاق</button>
+            <button class="btn-action" style="background:#333; color:white;" onclick="toggleAdmin()">إغلاق</button>
         </div>
     </div>
 
@@ -127,74 +121,55 @@
         const db = getDatabase(app);
         let currentPass = "123";
 
-        // استرجاع البيانات
-        onValue(ref(db, 'omnia_v15_final'), (s) => {
+        onValue(ref(db, 'omnia_v18_final'), (s) => {
             const data = s.val() || {};
             currentPass = data.pass || "123";
             document.getElementById('h-title').innerText = data.title || "مبروك التخرج";
             document.getElementById('h-intro').innerText = data.intro || "أمنية";
             
-            // حل الخلفية: جلب من السحابة وتخزين محلي
             if(data.bg) {
-                document.getElementById('site-bg').style.background = `url(${data.bg})`;
-                localStorage.setItem('saved_bg', data.bg);
+                document.getElementById('site-bg').style.backgroundImage = `url(${data.bg})`;
             }
             if(data.song) document.getElementById('bg-music').src = data.song;
 
-            const nBox = document.getElementById('n-list'); nBox.innerHTML = "";
-            const gBox = document.getElementById('g-list'); gBox.innerHTML = "";
-            const aItems = document.getElementById('admin-items'); aItems.innerHTML = "";
+            const nBox = document.getElementById('n-list'), gBox = document.getElementById('g-list'), aItems = document.getElementById('admin-items');
+            nBox.innerHTML = gBox.innerHTML = aItems.innerHTML = "";
 
-            if(data.notes) {
-                Object.keys(data.notes).forEach(k => {
-                    nBox.innerHTML += `<div class="glass-panel">${data.notes[k]}</div>`;
-                    // تعديل: إظهار نص الرسالة في الحذف
-                    aItems.innerHTML += `<div class="m-item"><div><b>رسالة:</b> ${data.notes[k].substring(0,30)}...</div><button onclick="del('notes/${k}')" style="background:red; color:white; border:none; padding:8px; border-radius:5px; margin-top:5px;">حذف النهائي</button></div>`;
-                });
-            }
+            if(data.notes) Object.keys(data.notes).forEach(k => {
+                nBox.innerHTML += `<div class="glass">${data.notes[k]}</div>`;
+                aItems.innerHTML += `<div class="m-item"><b>نص الرسالة:</b> <p>${data.notes[k]}</p><button onclick="del('notes/${k}')" style="color:red; background:none; border:1px solid red; padding:5px; border-radius:5px;">حذف</button></div>`;
+            });
 
-            if(data.media) {
-                Object.keys(data.media).forEach(k => {
-                    gBox.innerHTML += `<div class="photo-card" onclick="openV('${data.media[k].data}')"><img src="${data.media[k].data}"></div>`;
-                    aItems.innerHTML += `<div class="m-item" style="display:flex; align-items:center;"><img src="${data.media[k].data}"><span>صورة</span><button onclick="del('media/${k}')" style="background:red; color:white; border:none; padding:8px; border-radius:5px; margin-right:auto;">حذف</button></div>`;
-                });
-            }
+            if(data.media) Object.keys(data.media).forEach(k => {
+                gBox.innerHTML += `<div class="photo-card"><img src="${data.media[k].data}"></div>`;
+                aItems.innerHTML += `<div class="m-item"><img src="${data.media[k].data}"><span>صورة المعرض</span><button onclick="del('media/${k}')" style="color:red; background:none; border:1px solid red; padding:5px; border-radius:5px; float:left;">حذف</button></div>`;
+            });
         });
 
-        // تشغيل الخلفية المخزنة فوراً قبل تحميل Firebase
-        const localBg = localStorage.getItem('saved_bg');
-        if(localBg) document.getElementById('site-bg').style.background = `url(${localBg})`;
+        window.saveBg = () => {
+            const link = document.getElementById('bgLink').value;
+            if(link) { set(ref(db, 'omnia_v18_final/bg'), link); alert("الخلفية اتحدثت! ✅"); }
+        };
 
-        window.openV = (s) => { document.getElementById('v-img').src = s; document.getElementById('viewer').style.display = 'flex'; };
-        
         window.up = (i, t) => {
             const r = new FileReader();
             r.onload = (e) => {
-                const res = e.target.result;
-                if(t === 'bg') {
-                    set(ref(db, 'omnia_v15_final/bg'), res);
-                    localStorage.setItem('saved_bg', res);
-                    document.getElementById('site-bg').style.background = `url(${res})`;
-                }
-                else if(t === 'song') set(ref(db, 'omnia_v15_final/song'), res);
-                else push(ref(db, 'omnia_v15_final/media'), { data: res });
-                alert("تم الحفظ بنجاح ✅");
+                if(t === 'song') set(ref(db, 'omnia_v18_final/song'), e.target.result);
+                else push(ref(db, 'omnia_v18_final/media'), { data: e.target.result });
+                alert("تم الرفع! ✅");
             };
             r.readAsDataURL(i.files[0]);
         };
 
-        window.savePass = () => {
-            const p = document.getElementById('newPass').value;
-            if(p) { set(ref(db, 'omnia_v15_final/pass'), p); alert("تم تغيير الباسورد بنجاح! 🔐"); }
-        };
-
-        window.del = (p) => { if(confirm("حذف أكيد؟")) remove(ref(db, `omnia_v15_final/${p}`)); };
-        window.addN = () => { push(ref(db, 'omnia_v15_final/notes'), document.getElementById('mText').value); document.getElementById('mText').value=""; };
-        window.saveT = () => { set(ref(db, 'omnia_v15_final/title'), document.getElementById('inT').value); set(ref(db, 'omnia_v15_final/intro'), document.getElementById('inI').value); };
+        window.savePass = () => { set(ref(db, 'omnia_v18_final/pass'), document.getElementById('newPass').value); alert("تم تغيير الباسورد! 🔐"); };
+        window.del = (p) => { if(confirm("حذف؟")) remove(ref(db, `omnia_v18_final/${p}`)); };
+        window.addN = () => { push(ref(db, 'omnia_v18_final/notes'), document.getElementById('mText').value); document.getElementById('mText').value=""; };
+        window.saveT = () => { set(ref(db, 'omnia_v18_final/title'), document.getElementById('inT').value); set(ref(db, 'omnia_v18_final/intro'), document.getElementById('inI').value); };
         
-        window.controlMusic = () => {
+        window.toggleM = () => {
             const a = document.getElementById('bg-music');
-            if(a.paused) a.play(); else a.pause();
+            if(a.paused) { a.play(); document.getElementById('mIcon').innerHTML = '<i class="fas fa-heart"></i>'; }
+            else { a.pause(); document.getElementById('mIcon').innerHTML = '<i class="fas fa-heart-broken"></i>'; }
         };
 
         window.access = () => {
@@ -202,7 +177,7 @@
                 document.getElementById('login-screen').style.display = "none";
                 document.getElementById('main-content').style.display = "block";
                 document.getElementById('bg-music').play();
-            } else { alert("الباسورد غلط يا برنس!"); }
+            } else alert("الباسورد غلط!");
         };
 
         window.toggleAdmin = () => {
@@ -212,4 +187,3 @@
     </script>
 </body>
 </html>
-
