@@ -10,10 +10,9 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
-        :root { --gold: #ffb703; --glass: rgba(0, 0, 0, 0.3); } 
+        :root { --gold: #ffb703; --glass: rgba(0, 0, 0, 0.35); } 
         
         body { margin: 0; background-color: #000; background-size: cover; background-position: center; background-attachment: fixed; font-family: 'Cairo', sans-serif; color: #fff; text-align: center; overflow-x: hidden; }
-        /* طبقة حماية للرؤية مع الحفاظ على الشفافية */
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(1px); z-index: -1; }
 
         #gate { height: 100vh; display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; z-index: 9999; background-size: cover; background-position: center; transition: 1s; }
@@ -22,7 +21,6 @@
         #content { display: none; opacity: 0; padding: 20px; transition: 1s; }
         .grad-header { font-family: 'Amiri', serif; font-size: 2.8rem; text-shadow: 0 0 15px var(--gold); margin: 60px auto 20px; color: var(--gold); }
 
-        /* الكروت الشفافة تماماً */
         .glass-card { background: var(--glass); backdrop-filter: blur(12px); max-width: 800px; margin: 15px auto; border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
         
         .live-counter { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; direction: ltr; }
@@ -31,15 +29,19 @@
         .unit-label { font-size: 0.6rem; color: #ddd; }
 
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
-        .gallery img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); }
+        .gallery img, .gallery video { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); }
 
-        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
+        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; box-shadow: 0 0 10px var(--gold); }
 
         .adm-btn { width: 100%; padding: 14px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
-        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); color: #fff; padding: 25px; border-radius: 20px; z-index: 10001; width: 90%; max-width: 400px; text-align: right; max-height: 85vh; overflow-y: auto; border: 1px solid var(--gold); }
+        #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); color: #fff; padding: 20px; border-radius: 20px; z-index: 10001; width: 90%; max-width: 420px; text-align: right; max-height: 90vh; overflow-y: auto; border: 1px solid var(--gold); }
         input, textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; }
-        .trigger { opacity: 0.2; font-size: 12px; margin-top: 20px; cursor: pointer; display: block; }
+        
+        .manage-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .manage-item img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; }
+        .del-btn { background: #ff4d6d; color: white; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .trigger { opacity: 0.15; font-size: 11px; margin-top: 20px; cursor: pointer; display: block; }
     </style>
 </head>
 <body>
@@ -57,7 +59,7 @@
 
     <div id="content">
         <audio id="bgMusic" loop></audio>
-        <div class="grad-header" id="welcome-text">ألف مبروك النجاح</div>
+        <div class="grad-header" id="welcome-text">ألف مبروك</div>
         
         <div class="glass-card">
             <h5 style="margin:0 0 10px; color:var(--gold);">بدايه الرحلة:</h5>
@@ -70,28 +72,30 @@
     </div>
 
     <div id="admin-panel">
-        <h3 style="text-align:center; color:var(--gold);">لوحة التحكم ⚙️</h3>
+        <h3 style="text-align:center; color:var(--gold);">إدارة عالم أمنية ⚙️</h3>
         
-        <div class="glass-card" style="background:rgba(255,255,255,0.05)">
-            <label>1. إعدادات الدخول:</label>
-            <input type="text" id="confPass" placeholder="باسورد الدخول">
+        <div class="glass-card" style="background:rgba(255,255,255,0.03)">
+            <label>باسورد الدخول / التاريخ:</label>
+            <input type="text" id="confPass" placeholder="كلمة السر">
             <input type="date" id="confDate">
-            <button onclick="saveSettings()" class="adm-btn">حفظ الأساسيات</button>
-        </div>
-
-        <div class="glass-card" style="background:rgba(255,255,255,0.05)">
-            <label>2. التحكم في الخلفية (الأوبشن اللي ناقص):</label>
-            <input type="text" id="bgLink" placeholder="ضع رابط صورة مباشر (URL)">
+            <label>رابط خلفية مباشر (URL):</label>
+            <input type="text" id="bgLink" placeholder="أو ارفع ملف من الأسفل">
             <input type="file" id="bgFile" accept="image/*">
-            <button onclick="updateBg()" class="adm-btn" style="background:#28a745; color:white;">تحديث الخلفية فقط</button>
+            <button onclick="saveSettings()" class="adm-btn">حفظ الإعدادات والخلفية</button>
         </div>
 
-        <div class="glass-card" style="background:rgba(255,255,255,0.05)">
-            <label>3. المحتوى والموسيقى:</label>
-            <input type="file" id="musicFile" accept="audio/*">
-            <input type="file" id="photoFile" accept="image/*">
-            <textarea id="msgInp" placeholder="اكتب رسالة جديدة"></textarea>
-            <button onclick="uploadContent()" id="upBtn" class="adm-btn">رفع المحتوى</button>
+        <div class="glass-card" style="background:rgba(255,255,255,0.03)">
+            <label>رفع (صورة / فيديو / موسيقى):</label>
+            <input type="file" id="photoFile" accept="image/*" title="صورة للذكريات">
+            <input type="file" id="videoFile" accept="video/*" title="فيديو تخرج">
+            <input type="file" id="musicFile" accept="audio/*" title="أغنية الصفحة">
+            <textarea id="msgInp" placeholder="رسالة حب أو تخرج"></textarea>
+            <button onclick="uploadContent()" id="upBtn" class="adm-btn" style="background:#28a745; color:white;">رفع المحتوى الجديد</button>
+        </div>
+
+        <div id="manage-section" class="glass-card" style="background:rgba(255,255,255,0.03); max-height: 250px; overflow-y: auto;">
+            <h5 style="color:var(--gold); text-align:center; margin-top:0;">إدارة المحتوى (الحذف)</h5>
+            <div id="manage-list"></div>
         </div>
 
         <button onclick="document.getElementById('admin-panel').style.display='none'" class="adm-btn" style="background:#444; color:#fff;">إغلاق</button>
@@ -110,7 +114,6 @@
 
         let settings = { date: "2026-01-01", pass: "123" };
 
-        // مزامنة البيانات
         db.ref('appSettings').on('value', s => { if(s.val()) { settings = s.val(); document.getElementById('confPass').value = settings.pass; document.getElementById('confDate').value = settings.date; } });
         db.ref('visuals/bg').on('value', s => { if(s.val()) { document.body.style.backgroundImage = `url(${s.val()})`; document.getElementById('gate').style.backgroundImage = `url(${s.val()})`; } });
         db.ref('visuals/music').on('value', s => { if(s.val()) document.getElementById('bgMusic').src = s.val(); });
@@ -125,7 +128,7 @@
             } else alert("الباسورد غلط!");
         }
 
-        function openAdmin() { if(prompt("باسورد الإدارة:") === "1997") document.getElementById('admin-panel').style.display = "block"; }
+        function openAdmin() { if(prompt("كلمة سر الإدارة:") === "1997") { document.getElementById('admin-panel').style.display = "block"; loadManagement(); } }
 
         function toggleM() {
             const m = document.getElementById('bgMusic');
@@ -134,24 +137,21 @@
         }
 
         async function saveSettings() {
+            const bgLink = document.getElementById('bgLink').value;
+            const bgFile = document.getElementById('bgFile').files[0];
             await db.ref('appSettings').set({ pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
-            alert("تم حفظ الأساسيات ✅");
-        }
-
-        async function updateBg() {
-            const link = document.getElementById('bgLink').value;
-            const file = document.getElementById('bgFile').files[0];
-            if(link) await db.ref('visuals/bg').set(link);
-            if(file) {
-                const r = new FileReader(); r.readAsDataURL(file);
-                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("الخلفية اتحدثت ✅"); };
-            } else if(link) alert("الخلفية اتحدثت ✅");
+            if(bgLink) await db.ref('visuals/bg').set(bgLink);
+            if(bgFile) {
+                const r = new FileReader(); r.readAsDataURL(bgFile);
+                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ وتحديث الخلفية ✅"); };
+            } else { alert("تم حفظ الإعدادات ✅"); }
         }
 
         async function uploadContent() {
             const btn = document.getElementById('upBtn'); btn.disabled = true;
             const music = document.getElementById('musicFile').files[0];
             const photo = document.getElementById('photoFile').files[0];
+            const video = document.getElementById('videoFile').files[0];
             const msg = document.getElementById('msgInp').value;
 
             if(msg) await db.ref('messages').push({text: msg});
@@ -161,11 +161,15 @@
             }
             if(photo) {
                 const r = new FileReader(); r.readAsDataURL(photo);
-                r.onload = async () => { await db.ref('photos').push({url: r.result}); finish(); };
+                r.onload = async () => { await db.ref('photos').push({url: r.result, type: 'img'}); };
+            }
+            if(video) {
+                const r = new FileReader(); r.readAsDataURL(video);
+                r.onload = async () => { await db.ref('photos').push({url: r.result, type: 'vid'}); finish(); };
             } else finish();
         }
 
-        function finish() { alert("تم الرفع ✅"); location.reload(); }
+        function finish() { alert("تم الرفع بنجاح ✅"); location.reload(); }
 
         function loadData() {
             db.ref('messages').on('value', s => {
@@ -176,9 +180,29 @@
             });
             db.ref('photos').on('value', s => {
                 const g = document.getElementById('photo-gallery'); g.innerHTML = "";
-                if(s.val()) Object.values(s.val()).forEach(p => { g.innerHTML += `<img src="${p.url}">`; });
+                if(s.val()) Object.values(s.val()).forEach(p => {
+                    if(p.type === 'vid') g.innerHTML += `<video src="${p.url}" controls></video>`;
+                    else g.innerHTML += `<img src="${p.url}">`;
+                });
             });
         }
+
+        function loadManagement() {
+            const container = document.getElementById('manage-list'); container.innerHTML = "";
+            ['photos', 'messages'].forEach(type => {
+                db.ref(type).once('value', s => {
+                    if(s.val()) Object.entries(s.val()).forEach(([key, val]) => {
+                        const item = document.createElement('div');
+                        item.className = 'manage-item';
+                        let preview = type === 'photos' ? (val.type === 'vid' ? '📽️ فيديو' : `<img src="${val.url}">`) : `📝 ${val.text.substring(0,15)}...`;
+                        item.innerHTML = `<span>${preview}</span> <button class="del-btn" onclick="deleteItem('${type}','${key}')">حذف</button>`;
+                        container.appendChild(item);
+                    });
+                });
+            });
+        }
+
+        async function deleteItem(t, k) { if(confirm("حذف نهائي؟")) { await db.ref(`${t}/${k}`).remove(); loadManagement(); } }
 
         function startLiveCounter() {
             setInterval(() => {
