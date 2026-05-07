@@ -19,34 +19,38 @@
         #gate-overlay { background: var(--glass); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 380px; }
         
         #content { display: none; opacity: 0; padding: 20px; transition: 1s; }
-        .grad-header { font-family: 'Amiri', serif; font-size: 2.8rem; text-shadow: 0 0 15px var(--gold); margin: 60px auto 10px; color: var(--gold); }
-        .grad-intro { font-size: 1.2rem; color: #ddd; margin-bottom: 25px; }
+        .grad-header { font-family: 'Amiri', serif; font-size: 2.5rem; text-shadow: 0 0 15px var(--gold); margin: 50px auto 5px; color: var(--gold); }
+        .grad-intro { font-size: 1.1rem; color: #ddd; margin-bottom: 20px; }
 
-        .glass-card { background: var(--glass); backdrop-filter: blur(12px); max-width: 800px; margin: 15px auto; border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .glass-card { background: var(--glass); backdrop-filter: blur(12px); max-width: 800px; margin: 15px auto; border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .live-counter { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; direction: ltr; }
-        .counter-unit { background: rgba(255, 183, 3, 0.1); padding: 10px; border-radius: 12px; min-width: 50px; border: 1px solid rgba(255, 183, 3, 0.3); }
-        .unit-num { display: block; font-size: 1.2rem; font-weight: bold; color: var(--gold); }
-        .unit-label { font-size: 0.6rem; color: #ddd; }
+        /* تصغير العداد */
+        .live-counter { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 5px; direction: ltr; }
+        .counter-unit { background: rgba(255, 183, 3, 0.1); padding: 6px; border-radius: 10px; min-width: 42px; border: 1px solid rgba(255, 183, 3, 0.2); }
+        .unit-num { display: block; font-size: 1rem; font-weight: bold; color: var(--gold); }
+        .unit-label { font-size: 0.55rem; color: #ccc; }
 
-        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
-        .gallery img, .gallery video { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
-
+        /* المعرض والفيديوهات */
+        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px auto; }
+        .gallery img, .gallery video { width: 100%; height: 160px; object-fit: cover; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
+        
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; }
         #lightbox img { max-width: 90%; max-height: 80%; border-radius: 10px; border: 2px solid var(--gold); }
         .close-lightbox { position: absolute; top: 30px; right: 30px; font-size: 50px; color: var(--gold); cursor: pointer; }
 
-        .music-btn { position: fixed; top: 20px; left: 20px; width: 45px; height: 45px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
+        .music-btn { position: fixed; top: 20px; left: 20px; width: 40px; height: 40px; background: var(--gold); color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 5000; cursor: pointer; }
 
-        .adm-btn { width: 100%; padding: 14px; background: var(--gold); color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .adm-btn { width: 100%; padding: 12px; background: var(--gold); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         
         #admin-panel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); color: #fff; padding: 20px; border-radius: 20px; z-index: 10001; width: 90%; max-width: 420px; text-align: right; max-height: 90vh; overflow-y: auto; border: 1px solid var(--gold); }
-        input, textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; }
+        input, textarea { width: 100%; padding: 10px; margin: 6px 0; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; box-sizing: border-box; }
         
-        .manage-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .manage-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; margin-bottom: 8px; }
         .manage-item img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; }
-        .del-btn { background: #ff4d6d; color: white; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-        .trigger { opacity: 0.15; font-size: 11px; margin-top: 20px; cursor: pointer; display: block; }
+        .del-btn { background: #ff4d6d; color: white; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+        .trigger { opacity: 0.15; font-size: 10px; margin-top: 20px; cursor: pointer; display: block; }
+        
+        h4.sec-title { color: var(--gold); margin: 25px 0 10px; border-bottom: 1px solid rgba(255,183,3,0.3); display: inline-block; padding-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -65,21 +69,27 @@
 
     <div id="content">
         <audio id="bgMusic" loop></audio>
+        
         <div class="grad-header" id="welcome-title">ألف مبروك</div>
         <p class="grad-intro" id="welcome-intro">مبروك النجاح</p>
         
-        <div class="glass-card">
-            <h5 style="margin:0 0 10px; color:var(--gold);">بدايه الرحلة:</h5>
+        <div class="glass-card" style="padding: 10px;">
+            <p style="margin: 0 0 8px; font-size: 0.9rem; color: var(--gold);">بدايه الرحلة</p>
             <div id="live-timer" class="live-counter"></div>
-            <div id="messages-list" style="margin-top:20px;"></div>
         </div>
 
-        <h3 style="color:var(--gold)">ذكرياتنا 📸</h3>
+        <h4 class="sec-title">عالمكِ الخاص 📸</h4>
         <div class="gallery" id="photo-gallery"></div>
+
+        <h4 class="sec-title">لحظات لا تُنسى 📽️</h4>
+        <div class="gallery" id="video-gallery"></div>
+
+        <h4 class="sec-title">رسائل لكِ 💌</h4>
+        <div id="messages-list" style="max-width: 800px; margin: 0 auto 40px;"></div>
     </div>
 
     <div id="admin-panel">
-        <h3 style="text-align:center; color:var(--gold);">إدارة المحتوى اللحظية ⚙️</h3>
+        <h3 style="text-align:center; color:var(--gold);">إدارة المحتوى ⚙️</h3>
         
         <div class="glass-card" style="background:rgba(255,255,255,0.03)">
             <label>الإعدادات والخلفية:</label>
@@ -93,15 +103,15 @@
 
         <div class="glass-card" style="background:rgba(255,255,255,0.03)">
             <label>إضافة محتوى جديد:</label>
-            <input type="file" id="photoFile" accept="image/*">
-            <input type="file" id="videoFile" accept="video/*">
-            <input type="file" id="musicFile" accept="audio/*">
+            <input type="file" id="photoFile" accept="image/*" title="ارفع صورة">
+            <input type="file" id="videoFile" accept="video/*" title="ارفع فيديو">
+            <input type="file" id="musicFile" accept="audio/*" title="ارفع موسيقى">
             <textarea id="msgInp" placeholder="اكتب رسالة.."></textarea>
             <button onclick="uploadContent()" id="upBtn" class="adm-btn" style="background:#28a745; color:white;">رفع الآن</button>
         </div>
 
         <div id="manage-section" class="glass-card" style="background:rgba(255,255,255,0.03); max-height: 250px; overflow-y: auto;">
-            <h5 style="color:var(--gold); text-align:center; margin:0 0 10px 0;">العناصر الحالية (حذف)</h5>
+            <h5 style="color:var(--gold); text-align:center; margin:0 0 10px 0;">حذف العناصر</h5>
             <div id="manage-list"></div>
         </div>
 
@@ -143,7 +153,7 @@
                 document.getElementById('content').style.opacity = "1";
                 document.getElementById('bgMusic').play();
                 startLiveCounter(); loadData();
-            } else alert("خطأ في كلمة السر");
+            } else alert("باسورد الدخول غير صحيح");
         }
 
         function openAdmin() { if(prompt("باسورد الإدارة:") === "1997") { document.getElementById('admin-panel').style.display = "block"; loadManagement(); } }
@@ -160,8 +170,8 @@
             await db.ref('appSettings').update({ title: document.getElementById('confTitle').value, intro: document.getElementById('confIntro').value, pass: document.getElementById('confPass').value, date: document.getElementById('confDate').value });
             if(bgFile) {
                 const r = new FileReader(); r.readAsDataURL(bgFile);
-                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ وتحديث الخلفية ✅"); };
-            } else alert("تم حفظ الإعدادات ✅");
+                r.onload = async () => { await db.ref('visuals/bg').set(r.result); alert("تم الحفظ ✅"); };
+            } else alert("تم الحفظ ✅");
         }
 
         async function uploadContent() {
@@ -179,28 +189,28 @@
             if(photo) { const res = await readFile(photo); await db.ref('photos').push({url: res, type: 'img'}); }
             if(video) { const res = await readFile(video); await db.ref('photos').push({url: res, type: 'vid'}); }
 
-            // تصفية الخانات بعد الرفع
             document.getElementById('photoFile').value = "";
             document.getElementById('videoFile').value = "";
             document.getElementById('musicFile').value = "";
             
             btn.disabled = false; btn.innerText = "رفع الآن";
             alert("تم الرفع بنجاح ✅");
-            loadManagement(); // تحديث قائمة الحذف فوراً
+            loadManagement();
         }
 
         function loadData() {
             db.ref('messages').on('value', s => {
                 const l = document.getElementById('messages-list'); l.innerHTML = "";
                 if(s.val()) Object.values(s.val()).reverse().forEach(m => {
-                    l.innerHTML += `<div style="background:rgba(255,215,0,0.05); padding:10px; border-radius:12px; margin:8px 0; border-right:3px solid var(--gold); text-align:right;">${m.text}</div>`;
+                    l.innerHTML += `<div style="background:var(--glass); backdrop-filter:blur(10px); padding:12px; border-radius:15px; margin:10px auto; border-right:4px solid var(--gold); text-align:right; width:90%;">${m.text}</div>`;
                 });
             });
             db.ref('photos').on('value', s => {
-                const g = document.getElementById('photo-gallery'); g.innerHTML = "";
+                const pg = document.getElementById('photo-gallery'); const vg = document.getElementById('video-gallery');
+                pg.innerHTML = ""; vg.innerHTML = "";
                 if(s.val()) Object.values(s.val()).forEach(p => {
-                    if(p.type === 'vid') g.innerHTML += `<video src="${p.url}" controls></video>`;
-                    else g.innerHTML += `<img src="${p.url}" onclick="openImg('${p.url}')">`;
+                    if(p.type === 'vid') vg.innerHTML += `<video src="${p.url}" controls></video>`;
+                    else pg.innerHTML += `<img src="${p.url}" onclick="openImg('${p.url}')">`;
                 });
             });
         }
@@ -212,7 +222,7 @@
                     if(s.val()) Object.entries(s.val()).forEach(([key, val]) => {
                         const item = document.createElement('div');
                         item.className = 'manage-item';
-                        let preview = type === 'photos' ? (val.type === 'vid' ? '📽️ فيديو' : `<img src="${val.url}">`) : `📝 ${val.text.substring(0,12)}..`;
+                        let preview = type === 'photos' ? (val.type === 'vid' ? '📽️ فيديو' : `<img src="${val.url}">`) : `📝 ${val.text.substring(0,10)}..`;
                         item.innerHTML = `<span>${preview}</span> <button class="del-btn" onclick="deleteItem('${type}','${key}')">حذف</button>`;
                         container.appendChild(item);
                     });
